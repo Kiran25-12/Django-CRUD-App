@@ -1,0 +1,122 @@
+{% load static %}
+<html>
+<head>
+  <title>Home Page</title>
+  <link rel="icon" href="{% static 'icon.png'%}">
+
+  {% load bootstrap5 %} {% bootstrap_css %} {% bootstrap_javascript %}
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body style="font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;">
+  <nav class="navbar bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">
+        <h1 style="color: bisque;">Welcome {{username}}... <img src="{{image.image.url}}" style="height: 50px; width: 50px; border-radius: 25px;"></h1>
+
+      </a>
+      <button name="logout" style="
+            float: right;
+            width: 6%;
+            border-radius: 12px;
+            color: blue;
+            margin-right: 16px;
+            font-size: 25px;
+           
+          ">
+        <a href="/user_logout" style="text-decoration: none;">Logout</a>
+      </button>
+    </div>
+  </nav>
+  <h1 class="text-center my-5 ">EMPLOYEE <span style="color: red;">DETAILS</span></h1>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-body">
+            <table class="table table-hover table-sm ">
+              <thead>
+                <tr class="fs-4">
+                  <th>SNO.</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Department</th>
+                  <th>Contact</th>
+                  <th>Address</th>
+                  <th>Profile</th>
+                  <th>Delete</th>
+                  <th>Edit</th>
+                </tr>
+              </thead>
+              <tbody >
+                {% for item in fetch_data %}
+                <tr class="fs-4">
+                  <td class="align-middle">{{forloop.counter}}</td>
+                  <td class="align-middle">{{item.name}}</td>
+                  <td class="align-middle">{{item.email}}</td>
+                  <td class="align-middle">{{item.department}}</td>
+                  <td class="align-middle"> {{item.contact}}</td>
+                  <td class="align-middle">{{item.address}}</td>
+                  <td class="align-middle"><img src="{{ item.image.url }}" alt="Uploaded Image" height="90px" width="100px" style="border-radius: 15px;"></td>
+                  <!-- <td>{{item.image.url}}</td> -->
+                  <td class="align-middle">
+                    <a href="" data-bs-toggle="modal" data-bs-target="#deleteemployeeModal_{{item.id}}"
+                      ><i class="fa fa-trash"></i></a>
+                  </td>
+                  <td class="align-middle">
+                    <a href="/updateemployee/{{item.id}}" style="color: green;"> <i class="fa fa-pencil-square-o"
+                        aria-hidden="true"></i></a>
+                  </td>
+                </tr>
+                <div class="modal fade" id="deleteemployeeModal_{{item.id}}" data-bs-backdrop="static"
+                  data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteemployeeModal_{{item.id}}Label"
+                  aria-hidden="true">
+                  <div class="modal-dialog">
+                    <form action="" method="post">
+                      {% csrf_token %}
+                      <input type="hidden" name="id" value="{{item.id}}">
+                      <div class="modal-content">
+                        <div class="modal-body">
+                          <p>Are you sure? you want to delete</p>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            <a href="/dashboard" style="color: white; text-decoration: none;">
+                              Cancel</a></button>
+                          <button type="submit" class="btn btn-danger" name="delete">
+                            <a href="/deleteemployee/{{ item.id }}" style="color: white; text-decoration: none;">
+                              Delete Employee</a></button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                  
+                </div>
+                {% endfor %}
+              </tbody>
+            </table>
+
+          </div>
+
+
+        </div>
+        <div class="text-center">
+        <button  class="btn-success"
+          style="margin-top: 25px;font-size: 25px; border-radius: 5px;">
+          <a href="{% url 'employeeregister' %}" style="color: black; text-decoration: none;"> Add New Employee</a>
+        </button>
+       
+          
+
+        </div>
+
+
+      </div>
+    </div>
+
+  </div>
+
+  </div>
+</body>
+
+</html>
